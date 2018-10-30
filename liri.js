@@ -4,6 +4,7 @@ const Spotify = require('node-spotify-api');
 const request = require("request");
 const fs = require("fs");
 const moment = require("moment");
+const chalk = require("chalk");
 const keys = require("./key.js");
 
 const userInput = process.argv[2];
@@ -25,7 +26,7 @@ switch (userInput) {
         readFile();
         break;
     default:
-        console.log("Something went wrong mate...");
+        console.log(chalk.white.bgRed("Something went wrong mate..."));
         break;
 }
 
@@ -48,18 +49,18 @@ function findMovie() {
     request(queryUrl, (err, response, body) => {
 
         if (!err && response.statusCode === 200) {
-            console.log("-----------------");
-            console.log("* Movie Title: " + JSON.parse(body).Title);
-            console.log("* Year: " + JSON.parse(body).Year);
+            console.log(chalk.red("-----------------"));
+            console.log(chalk.underline.blue("* Movie Title:") + " " + JSON.parse(body).Title);
+            console.log(chalk.underline.blue("* Year:") + " " + JSON.parse(body).Year);
 
             for (var rating in JSON.parse(body).Ratings) {
-                console.log("* " + JSON.parse(body).Ratings[rating].Source + ": " + JSON.parse(body).Ratings[rating].Value);
+                console.log(chalk.underline.blue("*") + " " + JSON.parse(body).Ratings[rating].Source + ": " + JSON.parse(body).Ratings[rating].Value);
             }
 
-            console.log("* Language: " + JSON.parse(body).Language);
-            console.log("* Plot: " + JSON.parse(body).Plot);
-            console.log("* Actors: " + JSON.parse(body).Actors);
-            console.log("-----------------");
+            console.log(chalk.underline.blue("* Language:") + " " + JSON.parse(body).Language);
+            console.log(chalk.underline.blue("* Plot:") + " " + JSON.parse(body).Plot);
+            console.log(chalk.underline.blue("* Actors:") + " " + JSON.parse(body).Actors);
+            console.log(chalk.red("-----------------"));
         }
     });
 }
@@ -71,21 +72,21 @@ function findBad() {
     for (var i = 3; i < bandName.length; i++) {
         newString += bandName[i];
     }
-    // newString = newString.slice(0, -1);
+
     var queryUrl = "https://rest.bandsintown.com/artists/" + newString + "/events?app_id=codingbootcamp";
 
     request(queryUrl, (err, response, body) => {
         if (!err && response.statusCode === 200) {
             for (var i = 0; i < JSON.parse(body).length; i++) {
-                console.log("-----------------");
-                console.log("Venue: " + JSON.parse(body)[i].venue.name);
-                console.log("Location: " + JSON.parse(body)[i].venue.city);
+                console.log(chalk.red("-----------------"));
+                console.log(chalk.underline.blue("Venue:") + " " + JSON.parse(body)[i].venue.name);
+                console.log(chalk.underline.blue("Location:") + " " + JSON.parse(body)[i].venue.city);
 
                 var day = JSON.parse(body)[i].datetime.split("T");
                 day = day[0];
 
-                console.log("Day: " + moment(day).format("MM/DD/YYYY"));
-                console.log("-----------------");
+                console.log(chalk.underline.blue("Day:") + " " + moment(day).format("MM/DD/YYYY"));
+                console.log(chalk.red("-----------------"));
             }
         }
     });
@@ -112,12 +113,12 @@ function findSong() {
             return console.log('Error occurred: ' + err);
         }
         for (var i in data.tracks.items) {
-            console.log("-----------------");
-            console.log(data.tracks.items[i].album.name);
-            console.log(data.tracks.items[i].artists[0].name);
-            console.log(data.tracks.items[i].name);
-            console.log(data.tracks.items[i].preview_url);
-            console.log("-----------------");
+            console.log(chalk.red("-----------------"));
+            console.log(chalk.underline.blue("Album:") + " " + data.tracks.items[i].album.name);
+            console.log(chalk.underline.blue("Artist:") + " " + data.tracks.items[i].artists[0].name);
+            console.log(chalk.underline.blue("Track:") + " " + data.tracks.items[i].name);
+            console.log(chalk.underline.blue("Preview:") + " " + data.tracks.items[i].preview_url);
+            console.log(chalk.red("-----------------"));
         }
 
     });
@@ -135,7 +136,7 @@ function readFile() {
         newData[1] = newData[1].slice(1);
 
         process.argv.push(newData[1]);
-        
+
         switch (newData[0]) {
             case 'concert-this':
                 console.log("You be looking for a concert?");
