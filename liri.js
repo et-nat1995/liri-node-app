@@ -12,11 +12,9 @@ var spotify = new Spotify(keys.spotify);
 
 switch (userInput) {
     case 'concert-this':
-        console.log("You be looking for a concert?");
         findBad();
         break;
     case 'spotify-this-song':
-        console.log("You be looking for a song?");
         findSong();
         break;
     case 'movie-this':
@@ -30,7 +28,6 @@ switch (userInput) {
         console.log("Something went wrong mate...");
         break;
 }
-
 
 function findMovie() {
     var movieName = process.argv;
@@ -133,14 +130,11 @@ function readFile() {
         }
         console.log(data);
         var newData = data.split(",");
-        console.log(newData);
 
         newData[1] = newData[1].slice(0, -1);
         newData[1] = newData[1].slice(1);
 
         process.argv.push(newData[1]);
-        console.log(process.argv);
-        console.log(newData);
         
         switch (newData[0]) {
             case 'concert-this':
@@ -153,10 +147,6 @@ function readFile() {
                 break;
             case 'movie-this':
                 findMovie();
-                break;
-
-            case 'do-what-it-says':
-                readFile();
                 break;
             default:
                 console.log("Something went wrong mate...");
